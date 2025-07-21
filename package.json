@@ -1,11 +1,11 @@
 {
-  "name": "git-profile-picker-custom-sidebar-extended",
+  "name": "git-profile-picker",
   "displayName": "%displayName%",
   "description": "%description%",
-  "version": "0.0.4",
+  "version": "0.1.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/scorpion81/git-profile-picker-custom-sidebar-extended.git"
+    "url": "https://github.com/scorpion81/git-profile-picker.git"
   },
   "engines": {
     "vscode": "^1.85.0"
