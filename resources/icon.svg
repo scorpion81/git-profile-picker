@@ -1,13 +1,14 @@
-<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
   <!-- Kopf -->
-  <circle cx="16" cy="10" r="5" fill="#F05133"/>
+  <!-- Kopf -->
+  <circle cx="64" cy="40" r="20" fill="#F05133"/>
   <!-- Schultern -->
-  <ellipse cx="16" cy="22" rx="8" ry="5" fill="#F05133" opacity="0.7"/>
+  <ellipse cx="64" cy="88" rx="32" ry="20" fill="#F05133" opacity="0.7"/>
   <!-- Git-Verzweigung -->
-  <circle cx="10" cy="24" r="2" fill="#fff"/>
-  <circle cx="22" cy="24" r="2" fill="#fff"/>
-  <circle cx="16" cy="18" r="2" fill="#fff"/>
-  <path d="M16 18V24" stroke="#fff" stroke-width="1.5"/>
-  <path d="M16 18L10 24" stroke="#fff" stroke-width="1.5"/>
-  <path d="M16 18L22 24" stroke="#fff" stroke-width="1.5"/>
+  <circle cx="40" cy="96" r="8" fill="#fff"/>
+  <circle cx="88" cy="96" r="8" fill="#fff"/>
+  <circle cx="64" cy="72" r="8" fill="#fff"/>
+  <path d="M64 72V96" stroke="#fff" stroke-width="6"/>
+  <path d="M64 72L40 96" stroke="#fff" stroke-width="6"/>
+  <path d="M64 72L88 96" stroke="#fff" stroke-width="6"/>
 </svg>

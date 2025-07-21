@@ -3,6 +3,28 @@
   "displayName": "%displayName%",
   "description": "%description%",
   "version": "0.1.0",
+  "icon": "resources/icon.svg",
+  "publisher": "scorpion81",
+  "license": "MIT",
+  "keywords": [
+    "vscode",
+    "git",
+    "profile",
+    "picker",
+    "git profile",
+    "git profile picker",
+    "git profiles",
+    "git profile management",
+    "git profile switcher",
+    "git profile extension",
+    "git profile vscode"
+  ],
+  "categories": [
+    "Other",
+    "Git",
+    "Source Control"
+  ],
+  "homepage": "https://github.com/scorpion81/git-profile-picker#readme",
   "repository": {
     "type": "git",
     "url": "https://github.com/scorpion81/git-profile-picker.git"
