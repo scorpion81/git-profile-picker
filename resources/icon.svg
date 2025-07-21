@@ -1,1 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"><circle cx="8" cy="8" r="6" stroke="gray" stroke-width="2" fill="lightgray"/></svg>
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Kopf -->
+  <circle cx="16" cy="10" r="5" fill="#F05133"/>
+  <!-- Schultern -->
+  <ellipse cx="16" cy="22" rx="8" ry="5" fill="#F05133" opacity="0.7"/>
+  <!-- Git-Verzweigung -->
+  <circle cx="10" cy="24" r="2" fill="#fff"/>
+  <circle cx="22" cy="24" r="2" fill="#fff"/>
+  <circle cx="16" cy="18" r="2" fill="#fff"/>
+  <path d="M16 18V24" stroke="#fff" stroke-width="1.5"/>
+  <path d="M16 18L10 24" stroke="#fff" stroke-width="1.5"/>
+  <path d="M16 18L22 24" stroke="#fff" stroke-width="1.5"/>
+</svg>
