@@ -8,8 +8,18 @@
   "command.gitProfilePicker.deinitRepo": "De-initialize Git repository",
   "command.gitProfilePicker.showActions": "Actions",
   "command.gitProfilePicker.itemActions": "Item Actions",
-  "gitProfileContainer.title": "Git Identity",
+  "gitProfileContainer.title": "Git Profile",
   "gitProfileView.name": "Profiles & Init",
-  "displayName": "Git Identity Sidebar",
+  "displayName": "Git Profile Picker",
   "description": "Sidebar for selecting and applying Git profiles with init button and profile management"
+  ,
+  "command.gitProfilePicker.deleteProfilesFile": "Delete profile file",
+  "command.gitProfilePicker.deleteAllProfiles": "Delete all profiles",
+  "message.deleteProfilesFile.confirm": "Really delete the entire profile file (including active profile)? This cannot be undone.",
+  "message.profileAdded": "Profile added!",
+  "message.profileEdited": "Profile edited!",
+  "message.profileDeleted": "Profile deleted!",
+  "message.allProfilesDeleted": "All profiles deleted!",
+  "quickpick.actionSelect": "Select action",
+  "quickpick.itemActionSelect": "Select action for profile"
 }

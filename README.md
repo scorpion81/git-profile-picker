@@ -1,6 +1,6 @@
 # Git Profile Picker
 
-![Icon](resources/icon.png)
+![Icon](./resources/icon.png)
 
 👉 For the English version, see [README.en.md](README.en.md)
 

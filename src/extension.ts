@@ -9,45 +9,6 @@ interface GitProfile {
   user: string;
 }
 
-class GitProfileProvider implements vscode.TreeDataProvider<GitProfileItem> {
-  private _onDidChangeTreeData: vscode.EventEmitter<GitProfileItem | undefined | void> = new vscode.EventEmitter<GitProfileItem | undefined | void>();
-  readonly onDidChangeTreeData: vscode.Event<GitProfileItem | undefined | void> = this._onDidChangeTreeData.event;
-
-  constructor(private context: vscode.ExtensionContext) {}
-
-  getTreeItem(element: GitProfileItem): vscode.TreeItem {
-    return element;
-  }
-
-  getChildren(): GitProfileItem[] {
-    const profiles = this.getProfiles();
-    const activeProfile = this.getActiveProfile();
-    return profiles.map(profile => new GitProfileItem(profile, activeProfile));
-  }
-
-  refresh(): void {
-    this._onDidChangeTreeData.fire();
-  }
-
-  getProfiles(): GitProfile[] {
-    return this.context.globalState.get<GitProfile[]>('gitProfiles') || [];
-  }
-
-  saveProfiles(profiles: GitProfile[]) {
-    this.context.globalState.update('gitProfiles', profiles);
-    this.refresh();
-  }
-
-  setActiveProfile(profile: GitProfile) {
-    this.context.globalState.update('activeGitProfile', profile);
-    this.refresh();
-  }
-
-  getActiveProfile(): GitProfile | undefined {
-    return this.context.globalState.get<GitProfile>('activeGitProfile');
-  }
-}
-
 class GitProfileItem extends vscode.TreeItem {
   constructor(
     public readonly profile: GitProfile,
@@ -70,9 +31,141 @@ class GitProfileItem extends vscode.TreeItem {
   }
 }
 
+class GitProfileProvider implements vscode.TreeDataProvider<GitProfileItem> {
+  private _onDidChangeTreeData: vscode.EventEmitter<GitProfileItem | undefined | void> = new vscode.EventEmitter<GitProfileItem | undefined | void>();
+  readonly onDidChangeTreeData: vscode.Event<GitProfileItem | undefined | void> = this._onDidChangeTreeData.event;
+  private profilesPath: string;
+
+  constructor(private context: vscode.ExtensionContext) {
+    this.profilesPath = path.join(context.globalStorageUri.fsPath, 'profiles.json');
+  }
+
+  getTreeItem(element: GitProfileItem): vscode.TreeItem {
+    return element;
+  }
+
+  getChildren(): GitProfileItem[] {
+    const profiles = this.getProfiles();
+    const activeProfile = this.getActiveProfile();
+    return profiles.map(profile => new GitProfileItem(profile, activeProfile));
+  }
+
+  refresh(): void {
+    this._onDidChangeTreeData.fire();
+  }
+
+
+  getProfiles(): GitProfile[] {
+    try {
+      if (fs.existsSync(this.profilesPath)) {
+        const data = fs.readFileSync(this.profilesPath, 'utf-8');
+        const obj = JSON.parse(data);
+        return Array.isArray(obj.profiles) ? obj.profiles : [];
+      }
+    } catch (e) {
+      vscode.window.showErrorMessage('Fehler beim Laden der Profile.');
+    }
+    return [];
+  }
+
+  saveProfiles(profiles: GitProfile[]) {
+    try {
+      fs.mkdirSync(path.dirname(this.profilesPath), { recursive: true });
+      const activeProfile = this.getActiveProfile();
+      fs.writeFileSync(this.profilesPath, JSON.stringify({ profiles, activeProfile }, null, 2), 'utf-8');
+    } catch (e) {
+      vscode.window.showErrorMessage('Fehler beim Speichern der Profile.');
+    }
+    this.refresh();
+  }
+
+  setActiveProfile(profile: GitProfile) {
+    // globalState weiterhin für Kompatibilität setzen
+    this.context.globalState.update('activeGitProfile', profile);
+    // aktives Profil auch in Datei speichern
+    let profiles: GitProfile[] = [];
+    try {
+      if (fs.existsSync(this.profilesPath)) {
+        const data = fs.readFileSync(this.profilesPath, 'utf-8');
+        const obj = JSON.parse(data);
+        profiles = Array.isArray(obj.profiles) ? obj.profiles : [];
+      }
+    } catch {}
+    try {
+      fs.mkdirSync(path.dirname(this.profilesPath), { recursive: true });
+      fs.writeFileSync(this.profilesPath, JSON.stringify({ profiles, activeProfile: profile }, null, 2), 'utf-8');
+    } catch {}
+    this.refresh();
+  }
+
+  getActiveProfile(): GitProfile | undefined {
+    try {
+      if (fs.existsSync(this.profilesPath)) {
+        const data = fs.readFileSync(this.profilesPath, 'utf-8');
+        const obj = JSON.parse(data);
+        if (obj.activeProfile) return obj.activeProfile;
+      }
+    } catch {}
+    // Fallback auf globalState
+    return this.context.globalState.get<GitProfile>('activeGitProfile');
+  }
+
+  deleteAllProfiles() {
+    try {
+      if (fs.existsSync(this.profilesPath)) {
+        fs.unlinkSync(this.profilesPath);
+      }
+    } catch (e) {
+      vscode.window.showErrorMessage('Fehler beim Löschen der Profile.');
+    }
+    this.refresh();
+  }
+}
+
 export function activate(context: vscode.ExtensionContext) {
   const provider = new GitProfileProvider(context);
   vscode.window.registerTreeDataProvider('gitProfileView', provider);
+
+  // profiles.json komplett löschen (inkl. aktivem Profil)
+  context.subscriptions.push(
+    vscode.commands.registerCommand('gitProfilePicker.deleteProfilesFile', async () => {
+      const confirm = await vscode.window.showWarningMessage(
+        'Wirklich die gesamte Profile-Datei (inkl. aktivem Profil) löschen? Dies kann nicht rückgängig gemacht werden.',
+        { modal: true },
+        'Löschen', 'Abbrechen'
+      );
+      if (confirm !== 'Löschen') {
+        return;
+      }
+      try {
+        if (fs.existsSync(provider["profilesPath"])) {
+          fs.unlinkSync(provider["profilesPath"]);
+        }
+        // Auch globalState zurücksetzen
+        context.globalState.update('activeGitProfile', undefined);
+        vscode.window.showInformationMessage('Profile-Datei gelöscht!');
+        provider.refresh();
+      } catch (e) {
+        vscode.window.showErrorMessage('Fehler beim Löschen der Profile-Datei.');
+      }
+    })
+  );
+
+  // Alle Profile löschen
+  context.subscriptions.push(
+    vscode.commands.registerCommand('gitProfilePicker.deleteAllProfiles', async () => {
+      const confirm = await vscode.window.showWarningMessage(
+        'Wirklich alle Profile löschen?',
+        { modal: true },
+        'Löschen', 'Abbrechen'
+      );
+      if (confirm !== 'Löschen') {
+        return;
+      }
+      provider.deleteAllProfiles();
+      vscode.window.showInformationMessage('Alle Profile gelöscht!');
+    })
+  );
 
   // Profil hinzufügen
   context.subscriptions.push(
@@ -98,7 +191,7 @@ export function activate(context: vscode.ExtensionContext) {
       const user = await vscode.window.showInputBox({ prompt: 'Benutzername', value: profile.user });
       if (name && email && user) {
         const profiles = provider.getProfiles();
-        const idx = profiles.findIndex(p => p.name === profile.name && p.email === profile.email && p.user === profile.user);
+        const idx = profiles.findIndex((p: GitProfile) => p.name === profile.name && p.email === profile.email && p.user === profile.user);
         if (idx !== -1) {
           profiles[idx] = { name, email, user };
           provider.saveProfiles(profiles);
@@ -120,7 +213,7 @@ export function activate(context: vscode.ExtensionContext) {
         return;
       }
       const profiles = provider.getProfiles();
-      const idx = profiles.findIndex(p =>
+      const idx = profiles.findIndex((p: GitProfile) =>
         p.name === item.profile.name &&
         p.email === item.profile.email &&
         p.user === item.profile.user
@@ -241,7 +334,8 @@ export function activate(context: vscode.ExtensionContext) {
         { label: 'Git init mit aktivem Profil', command: 'gitProfilePicker.initWithProfile' },
         { label: 'Git-Profil auf aktuelles Repository anwenden', command: 'gitProfilePicker.applyProfile' },
         { label: 'Git-Repository de-initialisieren', command: 'gitProfilePicker.deinitRepo' },
-        { label: 'Git-Profil hinzufügen', command: 'gitProfilePicker.addProfile' }
+        { label: 'Git-Profil hinzufügen', command: 'gitProfilePicker.addProfile' },
+        { label: 'Profile-Datei löschen', command: 'gitProfilePicker.deleteProfilesFile' }
       ];
       const picked = await vscode.window.showQuickPick(actions, { placeHolder: 'Aktion auswählen' });
       if (picked) {

@@ -1,6 +1,6 @@
 # Git Profile Picker
 
-![Icon](resources/icon.png)
+![Icon](./resources/icon.png)
 
 Easily switch between different Git profiles directly in VS Code.
 
