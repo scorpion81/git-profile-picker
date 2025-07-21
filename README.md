@@ -2,6 +2,8 @@
 
 ![Icon](resources/icon.png)
 
+👉 For the English version, see [README.en.md](README.en.md)
+
 Einfaches Umschalten zwischen verschiedenen Git-Profilen direkt in VS Code.
 
 ## Features
