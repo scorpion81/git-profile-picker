@@ -132,7 +132,7 @@ export function activate(context: vscode.ExtensionContext) {
       const confirm = await vscode.window.showWarningMessage(
         'Wirklich die gesamte Profile-Datei (inkl. aktivem Profil) löschen? Dies kann nicht rückgängig gemacht werden.',
         { modal: true },
-        'Löschen', 'Abbrechen'
+        'Löschen'
       );
       if (confirm !== 'Löschen') {
         return;
@@ -143,7 +143,7 @@ export function activate(context: vscode.ExtensionContext) {
         }
         // Auch globalState zurücksetzen
         context.globalState.update('activeGitProfile', undefined);
-        vscode.window.showInformationMessage('Profile-Datei gelöscht!');
+        vscode.window.showInformationMessage('Profile-Datei gelöscht.');
         provider.refresh();
       } catch (e) {
         vscode.window.showErrorMessage('Fehler beim Löschen der Profile-Datei.');
@@ -155,9 +155,9 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(
     vscode.commands.registerCommand('gitProfilePicker.deleteAllProfiles', async () => {
       const confirm = await vscode.window.showWarningMessage(
-        'Wirklich alle Profile löschen?',
+        'Alle Profile löschen?',
         { modal: true },
-        'Löschen', 'Abbrechen'
+        'Löschen'
       );
       if (confirm !== 'Löschen') {
         return;
@@ -177,7 +177,7 @@ export function activate(context: vscode.ExtensionContext) {
         const profiles = provider.getProfiles();
         profiles.push({ name, email, user });
         provider.saveProfiles(profiles);
-        vscode.window.showInformationMessage('Profil hinzugefügt!');
+      vscode.window.showInformationMessage('Profil hinzugefügt!');
       }
     })
   );
@@ -195,7 +195,7 @@ export function activate(context: vscode.ExtensionContext) {
         if (idx !== -1) {
           profiles[idx] = { name, email, user };
           provider.saveProfiles(profiles);
-          vscode.window.showInformationMessage('Profil bearbeitet!');
+      vscode.window.showInformationMessage('Profil bearbeitet!');
         }
       }
     })
@@ -205,9 +205,9 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(
     vscode.commands.registerCommand('gitProfilePicker.deleteProfile', async (item: GitProfileItem) => {
       const confirm = await vscode.window.showWarningMessage(
-        `Profil "${item.profile.name}" wirklich löschen?`,
+        `Profil löschen "${item.profile.name}"?`,
         { modal: true },
-        'Löschen', 'Abbrechen'
+        'Löschen'
       );
       if (confirm !== 'Löschen') {
         return;
@@ -221,7 +221,7 @@ export function activate(context: vscode.ExtensionContext) {
       if (idx !== -1) {
         profiles.splice(idx, 1);
         provider.saveProfiles(profiles);
-        vscode.window.showInformationMessage('Profil gelöscht!');
+      vscode.window.showInformationMessage('Profil gelöscht!');
       }
     })
   );
@@ -348,9 +348,9 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(
     vscode.commands.registerCommand('gitProfilePicker.itemActions', async (item: GitProfileItem) => {
       const actions = [
-        { label: 'Als aktiv auswählen', command: 'gitProfilePicker.selectProfile' },
-        { label: 'Bearbeiten', command: 'gitProfilePicker.editProfile' },
-        { label: 'Löschen', command: 'gitProfilePicker.deleteProfile' }
+        { label: 'Als aktives Profil auswählen', command: 'gitProfilePicker.selectProfile' },
+        { label: 'Profil bearbeiten', command: 'gitProfilePicker.editProfile' },
+        { label: 'Profil löschen', command: 'gitProfilePicker.deleteProfile' }
       ];
       const picked = await vscode.window.showQuickPick(actions, { placeHolder: 'Aktion für Profil auswählen' });
       if (picked) {
