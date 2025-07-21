@@ -1,0 +1,101 @@
+{
+  "name": "git-profile-picker-custom-sidebar-extended",
+  "displayName": "%displayName%",
+  "description": "%description%",
+  "version": "0.0.4",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/scorpion81/git-profile-picker-custom-sidebar-extended.git"
+  },
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "activationEvents": [
+    "onView:gitProfileView"
+  ],
+  "main": "./out/extension.js",
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
+  },
+  "devDependencies": {
+    "@types/node": "^18.0.0",
+    "@types/vscode": "^1.85.0",
+    "typescript": "^5.0.0",
+    "vsce": "^2.15.0"
+  },
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "gitProfileContainer",
+          "title": "%gitProfileContainer.title%",
+          "icon": "resources/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "gitProfileContainer": [
+        {
+          "id": "gitProfileView",
+          "name": "%gitProfileView.name%"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "gitProfilePicker.selectProfile",
+        "title": "%command.gitProfilePicker.selectProfile%"
+      },
+      {
+        "command": "gitProfilePicker.initWithProfile",
+        "title": "%command.gitProfilePicker.initWithProfile%"
+      },
+      {
+        "command": "gitProfilePicker.addProfile",
+        "title": "%command.gitProfilePicker.addProfile%"
+      },
+      {
+        "command": "gitProfilePicker.editProfile",
+        "title": "%command.gitProfilePicker.editProfile%"
+      },
+      {
+        "command": "gitProfilePicker.deleteProfile",
+        "title": "%command.gitProfilePicker.deleteProfile%"
+      },
+      {
+        "command": "gitProfilePicker.applyProfile",
+        "title": "%command.gitProfilePicker.applyProfile%"
+      },
+      {
+        "command": "gitProfilePicker.deinitRepo",
+        "title": "%command.gitProfilePicker.deinitRepo%"
+      },
+      {
+        "command": "gitProfilePicker.showActions",
+        "title": "%command.gitProfilePicker.showActions%"
+      },
+      {
+        "command": "gitProfilePicker.itemActions",
+        "title": "%command.gitProfilePicker.itemActions%"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "gitProfilePicker.showActions",
+          "when": "view == gitProfileView",
+          "group": "navigation"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "gitProfilePicker.itemActions",
+          "when": "view == gitProfileView && viewItem == gitProfileItem",
+          "group": "inline"
+        }
+      ]
+    }
+  }
+}

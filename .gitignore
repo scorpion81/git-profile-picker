@@ -1,0 +1,23 @@
+# Node dependencies
+node_modules/
+
+# VS Code build output
+out/
+dist/
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# VS Code settings
+.vscode/
+
+# MacOS system files
+.DS_Store
+
+# Env files
+.env

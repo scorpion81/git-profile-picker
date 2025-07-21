@@ -1,0 +1,15 @@
+{
+  "command.gitProfilePicker.addProfile": "Add Git Profile",
+  "command.gitProfilePicker.editProfile": "Edit Git Profile",
+  "command.gitProfilePicker.deleteProfile": "Delete Git Profile",
+  "command.gitProfilePicker.selectProfile": "Select Active Git Profile",
+  "command.gitProfilePicker.initWithProfile": "Git init with active profile",
+  "command.gitProfilePicker.applyProfile": "Apply Git profile to current repository",
+  "command.gitProfilePicker.deinitRepo": "De-initialize Git repository",
+  "command.gitProfilePicker.showActions": "Actions",
+  "command.gitProfilePicker.itemActions": "Item Actions",
+  "gitProfileContainer.title": "Git Identity",
+  "gitProfileView.name": "Profiles & Init",
+  "displayName": "Git Identity Sidebar",
+  "description": "Sidebar for selecting and applying Git profiles with init button and profile management"
+}
